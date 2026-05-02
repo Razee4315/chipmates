@@ -151,18 +151,6 @@ function init() {
     gsap.to('.peek-char-tr, .peek-char-br', { x: x * -12, duration: 1, overwrite: 'auto' });
   });
 
-  /* ---------------- TEXT REVEALS ---------------- */
-  document.querySelectorAll('.reveal').forEach(el => {
-    gsap.fromTo(el,
-      { y: '110%', opacity: 0, rotate: 4 },
-      {
-        y: 0, opacity: 1, rotate: 0,
-        duration: .9, ease: 'back.out(1.2)',
-        scrollTrigger: { trigger: el, start: 'top 90%' }
-      }
-    );
-  });
-
   /* ---------------- STAT COUNTER ---------------- */
   document.querySelectorAll('.stat-num[data-count]').forEach(el => {
     const target = parseInt(el.dataset.count, 10);
@@ -178,6 +166,35 @@ function init() {
         });
       }
     });
+  });
+
+  /* ---------------- ADOPT-O-MATIC INTERACTION ---------------- */
+  setupAdoptMachine();
+
+  /* ---------------- CURSOR + CONFETTI ---------------- */
+  setupCanvasFX();
+
+  /* ---------------- MOBILE EARLY EXIT ---------------- */
+  // On phones (or any touch-only device) skip everything below. Dozens
+  // of ScrollTriggers + scroll-tied parallax + perpetual yoyo bounces
+  // on every chipmate were tanking framerate, which made sections fade
+  // in noticeably late on mobile. Mobile keeps: hero entrance, idle hero
+  // motion, stat counter, the Adopt-O-Matic, Lenis smooth scroll. The
+  // squad cards / habitat / stickers just sit in place — much faster.
+  const isMobile = window.matchMedia('(max-width: 640px)').matches
+                || window.matchMedia('(hover: none)').matches;
+  if (isMobile) return;
+
+  /* ---------------- TEXT REVEALS ---------------- */
+  document.querySelectorAll('.reveal').forEach(el => {
+    gsap.fromTo(el,
+      { y: '110%', opacity: 0, rotate: 4 },
+      {
+        y: 0, opacity: 1, rotate: 0,
+        duration: .9, ease: 'back.out(1.2)',
+        scrollTrigger: { trigger: el, start: 'top 90%' }
+      }
+    );
   });
 
   /* ---------------- ORBIT FLOAT IN ---------------- */
@@ -293,12 +310,6 @@ function init() {
       scrollTrigger: { trigger: '.footer', start: 'top 70%' }
     }
   );
-
-  /* ---------------- ADOPT-O-MATIC INTERACTION ---------------- */
-  setupAdoptMachine();
-
-  /* ---------------- CURSOR + CONFETTI ---------------- */
-  setupCanvasFX();
 
   /* ---------------- IDLE BOUNCES (gentler) ---------------- */
   gsap.to('.about-char img', {
