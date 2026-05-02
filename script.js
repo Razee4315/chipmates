@@ -2,9 +2,14 @@
    CHIPMATES — interactions & motion (calmer pass)
    ========================================================= */
 
-// Wait for the preloader to finish AND for all CDN libs to load.
-// The preloader fires `site:ready` on the document once images are loaded.
+// Boot sequence
+//   1. Preloader fires `site:prepare` BEFORE it fades out → we set every
+//      hero entrance element to its hidden/offset state. The preloader
+//      stays in front while we do this, so the user never sees the snap.
+//   2. Preloader finishes its fade and fires `site:ready` → we run init()
+//      which plays the entrance timeline + binds scroll triggers.
 let __preloaderDone = false;
+let __preppedStates = false;
 let __initRan = false;
 
 function __tryInit() {
@@ -18,16 +23,36 @@ function __tryInit() {
   init();
 }
 
+// Set the entrance starting states. Runs while preloader is still
+// covering the page so the snap-to-hidden is invisible.
+function prepEntranceStates() {
+  if (__preppedStates) return;
+  if (!window.gsap) return;
+  __preppedStates = true;
+  gsap.set('.hero-char', { y: 80, scale: .92, opacity: 0 });
+  gsap.set('.peek', { scale: 0, opacity: 0 });
+  gsap.set('.peek-char-tl', { x: -120, opacity: 0 });
+  gsap.set('.peek-char-tr', { x: 120, opacity: 0 });
+  gsap.set('.peek-char-bl', { x: -120, y: 60, opacity: 0 });
+  gsap.set('.peek-char-br', { x: 120, y: 60, opacity: 0 });
+  gsap.set('.hero-title .word', { y: '110%', rotate: 6, opacity: 0 });
+  gsap.set('.hero .eyebrow, .hero-sub, .hero-cta', { y: 30, opacity: 0 });
+  gsap.set('.hero-tag', { scale: 0, rotate: -30, opacity: 0 });
+}
+
+document.addEventListener('site:prepare', prepEntranceStates);
+
 document.addEventListener('site:ready', () => {
   __preloaderDone = true;
   __tryInit();
 });
 
-// Failsafe: if for some reason the preloader is missing or the event
-// never fires (e.g. someone strips it out), still boot after window.load.
+// Failsafe: if for some reason the preloader is missing or the events
+// never fire (e.g. someone strips them out), still boot after window.load.
 window.addEventListener('load', () => {
   setTimeout(() => {
     if (!__initRan && !document.getElementById('preloader')) {
+      prepEntranceStates();
       __preloaderDone = true;
       __tryInit();
     }

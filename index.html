@@ -83,12 +83,21 @@
           if (fill) fill.style.width = '100%';
           if (pct) pct.textContent = '100%';
           setTimeout(function () {
-            pre.classList.add('is-done');
+            // Tell the site to set entrance starting states (hide / offset
+            // hero elements) BEFORE the preloader fades. Otherwise the
+            // user briefly sees the page assembled, then everything snaps
+            // to hidden state, then animates in — visually jarring.
+            document.dispatchEvent(new Event('site:prepare'));
+            // Give the browser a paint cycle so the GSAP sets land before
+            // we begin the fade.
             setTimeout(function () {
-              pre.parentNode && pre.parentNode.removeChild(pre);
-              document.documentElement.classList.remove('is-loading');
-              document.dispatchEvent(new Event('site:ready'));
-            }, 650);
+              pre.classList.add('is-done');
+              setTimeout(function () {
+                pre.parentNode && pre.parentNode.removeChild(pre);
+                document.documentElement.classList.remove('is-loading');
+                document.dispatchEvent(new Event('site:ready'));
+              }, 650);
+            }, 60);
           }, 220);
         }, wait);
       }
