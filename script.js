@@ -15,7 +15,7 @@ let __initRan = false;
 function __tryInit() {
   if (__initRan) return;
   if (!__preloaderDone) return;
-  if (!(window.gsap && window.ScrollTrigger && window.Lenis)) {
+  if (!(window.gsap && window.ScrollTrigger)) {
     requestAnimationFrame(__tryInit);
     return;
   }
@@ -71,23 +71,19 @@ window.addEventListener('load', () => {
 function init() {
   gsap.registerPlugin(ScrollTrigger);
 
-  /* ---------------- Lenis smooth scroll ---------------- */
-  const lenis = new Lenis({
-    duration: 1.2,
-    easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothWheel: true,
-  });
-  lenis.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add(time => lenis.raf(time * 1000));
-  gsap.ticker.lagSmoothing(0);
-
+  /* ---------------- Native smooth-scroll for anchor links ----------------
+     Was using Lenis here, but it intercepted wheel/trackpad events on some
+     setups (notably Windows touchscreen laptops) and silently failed to
+     scroll, leaving the page unscrollable + breaking every anchor button.
+     CSS `scroll-behavior: smooth` plus `scrollIntoView` is bulletproof. */
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        lenis.scrollTo(target, { duration: 1.4, offset: -40 });
-      }
+      const href = a.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 

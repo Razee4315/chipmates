@@ -25,7 +25,11 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
-html { scroll-behavior: auto; -webkit-font-smoothing: antialiased; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px; /* fixed nav clearance for anchor jumps */
+  -webkit-font-smoothing: antialiased;
+}
 html.is-loading, html.is-loading body { overflow: hidden; }
 body {
   font-family: var(--font-body);
