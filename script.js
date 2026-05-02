@@ -2,15 +2,36 @@
    CHIPMATES — interactions & motion (calmer pass)
    ========================================================= */
 
-window.addEventListener('DOMContentLoaded', () => {
-  const ready = () => {
-    if (window.gsap && window.ScrollTrigger && window.Lenis) {
-      init();
-    } else {
-      requestAnimationFrame(ready);
+// Wait for the preloader to finish AND for all CDN libs to load.
+// The preloader fires `site:ready` on the document once images are loaded.
+let __preloaderDone = false;
+let __initRan = false;
+
+function __tryInit() {
+  if (__initRan) return;
+  if (!__preloaderDone) return;
+  if (!(window.gsap && window.ScrollTrigger && window.Lenis)) {
+    requestAnimationFrame(__tryInit);
+    return;
+  }
+  __initRan = true;
+  init();
+}
+
+document.addEventListener('site:ready', () => {
+  __preloaderDone = true;
+  __tryInit();
+});
+
+// Failsafe: if for some reason the preloader is missing or the event
+// never fires (e.g. someone strips it out), still boot after window.load.
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    if (!__initRan && !document.getElementById('preloader')) {
+      __preloaderDone = true;
+      __tryInit();
     }
-  };
-  ready();
+  }, 100);
 });
 
 function init() {

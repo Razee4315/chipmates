@@ -23,6 +23,103 @@
 </head>
 <body>
 
+  <!-- ============== PRELOADER ============== -->
+  <div class="preloader" id="preloader" role="status" aria-live="polite">
+    <div class="preload-grid"></div>
+    <div class="preload-content">
+      <img class="preload-char" src="assets/chip-o.png" alt="" draggable="false" />
+      <div class="preload-brand">CHIPMATES</div>
+      <div class="preload-bar"><span id="preloadFill"></span></div>
+      <div class="preload-status">
+        <span id="preloadPct">0%</span>
+        <span class="preload-dot"></span>
+        <span id="preloadMsg">booting up...</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Lock scroll until preloader fades out
+    document.documentElement.classList.add('is-loading');
+
+    (function () {
+      var pre = document.getElementById('preloader');
+      var fill = document.getElementById('preloadFill');
+      var pct = document.getElementById('preloadPct');
+      var msgEl = document.getElementById('preloadMsg');
+
+      var messages = [
+        'booting up...',
+        'warming the cpu...',
+        'feeding chipmates...',
+        'spinning the disks...',
+        'polishing pixels...',
+        'loading the squad...',
+        'almost there...'
+      ];
+      var msgIdx = 0;
+      var msgTimer = setInterval(function () {
+        msgIdx = (msgIdx + 1) % messages.length;
+        if (msgEl) msgEl.textContent = messages[msgIdx];
+      }, 900);
+
+      var startTime = Date.now();
+      var MIN_SHOW = 800; // ms — don't flash if cached
+      var loaded = 0;
+      var total = 0;
+
+      function update() {
+        var p = total === 0 ? 0 : Math.round((loaded / total) * 100);
+        if (fill) fill.style.width = p + '%';
+        if (pct) pct.textContent = p + '%';
+      }
+
+      function finish() {
+        var elapsed = Date.now() - startTime;
+        var wait = Math.max(0, MIN_SHOW - elapsed);
+        setTimeout(function () {
+          clearInterval(msgTimer);
+          if (msgEl) msgEl.textContent = 'all set!';
+          if (fill) fill.style.width = '100%';
+          if (pct) pct.textContent = '100%';
+          setTimeout(function () {
+            pre.classList.add('is-done');
+            setTimeout(function () {
+              pre.parentNode && pre.parentNode.removeChild(pre);
+              document.documentElement.classList.remove('is-loading');
+              document.dispatchEvent(new Event('site:ready'));
+            }, 650);
+          }, 220);
+        }, wait);
+      }
+
+      function tick() {
+        loaded++;
+        update();
+        if (loaded >= total) finish();
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        var imgs = Array.prototype.slice.call(document.querySelectorAll('img'));
+        total = imgs.length;
+        if (total === 0) { finish(); return; }
+        imgs.forEach(function (img) {
+          if (img.complete && img.naturalWidth > 0) {
+            tick();
+          } else {
+            img.addEventListener('load', tick, { once: true });
+            img.addEventListener('error', tick, { once: true });
+          }
+        });
+      });
+
+      // Safety net — if anything stalls, force-finish at window.load
+      window.addEventListener('load', function () {
+        if (loaded < total) { loaded = total; update(); finish(); }
+      });
+    })();
+  </script>
+
   <canvas id="fx-canvas" aria-hidden="true"></canvas>
 
   <!-- ============== NAV ============== -->
