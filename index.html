@@ -109,7 +109,14 @@
       }
 
       document.addEventListener('DOMContentLoaded', function () {
-        var imgs = Array.prototype.slice.call(document.querySelectorAll('img'));
+        // Only block on the images the user sees first paint:
+        // the preloader char itself, the nav logo, and the hero
+        // section. Everything else is loading="lazy" so the browser
+        // streams them in as the user scrolls — no need to make the
+        // preloader wait on them.
+        var imgs = Array.prototype.slice.call(
+          document.querySelectorAll('.preload-char, .nav img, .hero img')
+        );
         total = imgs.length;
         if (total === 0) { finish(); return; }
         imgs.forEach(function (img) {
@@ -199,15 +206,15 @@
       <span>★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★</span>
       <span>★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★ NOW BOOTING ★</span>
     </div>
-    <img class="marquee-ribbon" src="assets/ribbon-wave.png" alt="" />
+    <img loading="lazy" class="marquee-ribbon" src="assets/ribbon-wave.png" alt="" />
   </div>
 
   <!-- ============== ABOUT ============== -->
   <section id="about" class="about">
-    <img class="orbit orbit-1" src="assets/sticker-heart.png" alt="" />
-    <img class="orbit orbit-2" src="assets/sticker-star.png" alt="" />
-    <img class="orbit orbit-3" src="assets/sticker-gear.png" alt="" />
-    <img class="orbit orbit-4" src="assets/sticker-loading.png" alt="" />
+    <img loading="lazy" class="orbit orbit-1" src="assets/sticker-heart.png" alt="" />
+    <img loading="lazy" class="orbit orbit-2" src="assets/sticker-star.png" alt="" />
+    <img loading="lazy" class="orbit orbit-3" src="assets/sticker-gear.png" alt="" />
+    <img loading="lazy" class="orbit orbit-4" src="assets/sticker-loading.png" alt="" />
 
     <div class="about-content">
       <p class="eyebrow">001 · what's a chipmate?</p>
@@ -228,16 +235,16 @@
     </div>
 
     <div class="about-char">
-      <img src="assets/gigi-pose.png" alt="GIGI the GPU" />
+      <img loading="lazy" src="assets/gigi-pose.png" alt="GIGI the GPU" />
     </div>
   </section>
 
   <!-- ============== SQUAD ============== -->
   <section id="squad" class="squad">
-    <img class="deco deco-1" src="assets/sticker-sparkle.png" alt="" />
-    <img class="deco deco-2" src="assets/sticker-bubble.png" alt="" />
-    <img class="deco deco-3" src="assets/sticker-thumbs.png" alt="" />
-    <img class="deco deco-4" src="assets/sticker-heart.png" alt="" />
+    <img loading="lazy" class="deco deco-1" src="assets/sticker-sparkle.png" alt="" />
+    <img loading="lazy" class="deco deco-2" src="assets/sticker-bubble.png" alt="" />
+    <img loading="lazy" class="deco deco-3" src="assets/sticker-thumbs.png" alt="" />
+    <img loading="lazy" class="deco deco-4" src="assets/sticker-heart.png" alt="" />
 
     <header class="section-head">
       <p class="eyebrow">002 · the squad</p>
@@ -247,7 +254,7 @@
 
     <div class="squad-grid">
       <article class="card" style="--bg:#DCE7FF; --accent:#3D5AFE;">
-        <div class="card-img"><img src="assets/chip-o.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/chip-o.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#01</span><span class="card-tag">CPU</span></div>
           <h3 class="card-name">CHIP-O</h3>
@@ -259,7 +266,7 @@
       </article>
 
       <article class="card" style="--bg:#FFD9E8; --accent:#FF4D9D;">
-        <div class="card-img"><img src="assets/gigi.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/gigi.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#02</span><span class="card-tag">GPU</span></div>
           <h3 class="card-name">GIGI</h3>
@@ -271,7 +278,7 @@
       </article>
 
       <article class="card" style="--bg:#E5FBC4; --accent:#5FA01B;">
-        <div class="card-img"><img src="assets/memsy.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/memsy.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#03</span><span class="card-tag">RAM</span></div>
           <h3 class="card-name">MEMSY</h3>
@@ -283,7 +290,7 @@
       </article>
 
       <article class="card" style="--bg:#FFF3BC; --accent:#C49500;">
-        <div class="card-img"><img src="assets/disko.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/disko.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#04</span><span class="card-tag">FLOPPY</span></div>
           <h3 class="card-name">DISKO</h3>
@@ -295,7 +302,7 @@
       </article>
 
       <article class="card" style="--bg:#EDE5FF; --accent:#7A4DFF;">
-        <div class="card-img"><img src="assets/cddy.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/cddy.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#05</span><span class="card-tag">CD-ROM</span></div>
           <h3 class="card-name">CDDY</h3>
@@ -307,7 +314,7 @@
       </article>
 
       <article class="card" style="--bg:#FFE0CC; --accent:#E0612A;">
-        <div class="card-img"><img src="assets/porty.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/porty.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#06</span><span class="card-tag">USB</span></div>
           <h3 class="card-name">PORTY</h3>
@@ -319,7 +326,7 @@
       </article>
 
       <article class="card" style="--bg:#ECEEF0; --accent:#5A6473;">
-        <div class="card-img"><img src="assets/clicky.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/clicky.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#07</span><span class="card-tag">MOUSE</span></div>
           <h3 class="card-name">CLICKY</h3>
@@ -331,7 +338,7 @@
       </article>
 
       <article class="card" style="--bg:#F4EBD8; --accent:#8A7140;">
-        <div class="card-img"><img src="assets/pixle.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/pixle.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#08</span><span class="card-tag">MONITOR</span></div>
           <h3 class="card-name">PIXLE</h3>
@@ -343,7 +350,7 @@
       </article>
 
       <article class="card" style="--bg:#FFD8D2; --accent:#D74A38;">
-        <div class="card-img"><img src="assets/mo.png" alt="" /></div>
+        <div class="card-img"><img loading="lazy" src="assets/mo.png" alt="" /></div>
         <div class="card-info">
           <div class="card-row"><span class="card-num">#09</span><span class="card-tag">MODEM</span></div>
           <h3 class="card-name">MO</h3>
@@ -360,10 +367,10 @@
   <section id="adopt" class="adopt">
     <div class="adopt-bg-grid"></div>
 
-    <img class="deco-dark deco-d-1" src="assets/sticker-star.png" alt="" />
-    <img class="deco-dark deco-d-2" src="assets/sticker-sparkle.png" alt="" />
-    <img class="deco-dark deco-d-3" src="assets/sticker-loading.png" alt="" />
-    <img class="deco-dark deco-d-4" src="assets/sticker-power.png" alt="" />
+    <img loading="lazy" class="deco-dark deco-d-1" src="assets/sticker-star.png" alt="" />
+    <img loading="lazy" class="deco-dark deco-d-2" src="assets/sticker-sparkle.png" alt="" />
+    <img loading="lazy" class="deco-dark deco-d-3" src="assets/sticker-loading.png" alt="" />
+    <img loading="lazy" class="deco-dark deco-d-4" src="assets/sticker-power.png" alt="" />
 
     <header class="section-head">
       <p class="eyebrow">003 · adopt-o-matic</p>
@@ -372,7 +379,7 @@
 
     <div class="adopt-stage">
       <div class="adopt-machine">
-        <img src="assets/adopt-o-matic.png" alt="The Adopt-O-Matic machine" />
+        <img loading="lazy" src="assets/adopt-o-matic.png" alt="The Adopt-O-Matic machine" />
         <button id="pullLever" class="lever-btn">
           <span class="lever-shadow"></span>
           <span class="lever-label">PULL THE LEVER</span>
@@ -383,7 +390,7 @@
         <div class="result-label">YOUR NEW BUDDY</div>
         <div class="result-card" id="resultCard">
           <div class="result-empty">
-            <img src="assets/sticker-arrow.png" alt="" />
+            <img loading="lazy" src="assets/sticker-arrow.png" alt="" />
             <p>pull the lever to meet a chipmate</p>
           </div>
         </div>
@@ -401,22 +408,22 @@
     </header>
 
     <div class="habitat-stage">
-      <img class="hab-bg" src="assets/habitat-bg.jpg" alt="" />
-      <img class="hab-mid" src="assets/habitat-mid.png" alt="" />
-      <img class="hab-char hab-sleep" src="assets/chip-o-sleeping.png" alt="" />
-      <img class="hab-char hab-work" src="assets/memsy-working.png" alt="" />
-      <img class="hab-char hab-dance" src="assets/disko-dancing.png" alt="" />
-      <img class="hab-char hab-drive" src="assets/porty-driving.png" alt="" />
-      <img class="hab-char hab-mothra" src="assets/mothra.png" alt="" />
-      <img class="hab-fg" src="assets/habitat-fg.png" alt="" />
+      <img loading="lazy" class="hab-bg" src="assets/habitat-bg.jpg" alt="" />
+      <img loading="lazy" class="hab-mid" src="assets/habitat-mid.png" alt="" />
+      <img loading="lazy" class="hab-char hab-sleep" src="assets/chip-o-sleeping.png" alt="" />
+      <img loading="lazy" class="hab-char hab-work" src="assets/memsy-working.png" alt="" />
+      <img loading="lazy" class="hab-char hab-dance" src="assets/disko-dancing.png" alt="" />
+      <img loading="lazy" class="hab-char hab-drive" src="assets/porty-driving.png" alt="" />
+      <img loading="lazy" class="hab-char hab-mothra" src="assets/mothra.png" alt="" />
+      <img loading="lazy" class="hab-fg" src="assets/habitat-fg.png" alt="" />
     </div>
   </section>
 
   <!-- ============== STICKERBOOK ============== -->
   <section id="stickers" class="stickers">
-    <img class="deco deco-s-1" src="assets/sticker-arrow.png" alt="" />
-    <img class="deco deco-s-2" src="assets/sticker-power.png" alt="" />
-    <img class="deco deco-s-3" src="assets/sticker-wifi.png" alt="" />
+    <img loading="lazy" class="deco deco-s-1" src="assets/sticker-arrow.png" alt="" />
+    <img loading="lazy" class="deco deco-s-2" src="assets/sticker-power.png" alt="" />
+    <img loading="lazy" class="deco deco-s-3" src="assets/sticker-wifi.png" alt="" />
 
     <header class="section-head">
       <p class="eyebrow">005 · the stickerbook</p>
@@ -425,29 +432,29 @@
     </header>
 
     <div class="badges">
-      <div class="badge"><img src="assets/badge-certified.png" alt="Certified Chipmate" /></div>
-      <div class="badge"><img src="assets/badge-100.png" alt="100% Chonky" /></div>
-      <div class="badge"><img src="assets/badge-beta.png" alt="Beta Tester" /></div>
-      <div class="badge"><img src="assets/badge-vip.png" alt="VIP" /></div>
+      <div class="badge"><img loading="lazy" src="assets/badge-certified.png" alt="Certified Chipmate" /></div>
+      <div class="badge"><img loading="lazy" src="assets/badge-100.png" alt="100% Chonky" /></div>
+      <div class="badge"><img loading="lazy" src="assets/badge-beta.png" alt="Beta Tester" /></div>
+      <div class="badge"><img loading="lazy" src="assets/badge-vip.png" alt="VIP" /></div>
     </div>
 
     <div class="sticker-grid">
-      <div class="sticker"><img src="assets/sticker-heart.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-star.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-sparkle.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-gear.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-bubble.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-power.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-wifi.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-loading.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-thumbs.png" alt="" /></div>
-      <div class="sticker"><img src="assets/sticker-arrow.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-heart.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-star.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-sparkle.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-gear.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-bubble.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-power.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-wifi.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-loading.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-thumbs.png" alt="" /></div>
+      <div class="sticker"><img loading="lazy" src="assets/sticker-arrow.png" alt="" /></div>
     </div>
   </section>
 
   <!-- ============== FOOTER ============== -->
   <footer id="footer" class="footer">
-    <img class="footer-mailbox" src="assets/mailbox.png" alt="" />
+    <img loading="lazy" class="footer-mailbox" src="assets/mailbox.png" alt="" />
 
     <div class="footer-content">
       <p class="eyebrow">006 · join the world</p>
@@ -481,7 +488,7 @@
 
     <div class="footer-bar">
       <div class="footer-bar-l">
-        <img src="assets/logo-wordmark-black.png" alt="Chipmates" />
+        <img loading="lazy" src="assets/logo-wordmark-black.png" alt="Chipmates" />
       </div>
       <nav class="footer-links">
         <a href="#about">about</a>

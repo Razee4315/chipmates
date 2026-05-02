@@ -32,3 +32,6 @@ build/
 .env
 .env.local
 .env.*.local
+
+# Asset backups — kept locally for safety, not pushed to repo
+assets/_originals/
