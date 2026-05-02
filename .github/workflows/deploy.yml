@@ -1,0 +1,44 @@
+name: Deploy to GitHub Pages
+
+# Runs on every push to main, plus manual trigger from the Actions tab
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Permissions GitHub Pages deploys need
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one Pages deployment at a time. Don't cancel a running deploy.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # No build step needed — pure static HTML/CSS/JS.
+      # Upload the whole repo as the site (index.html is at the root).
+      - name: Upload site as artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
