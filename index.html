@@ -133,6 +133,18 @@
       window.addEventListener('load', function () {
         if (loaded < total) { loaded = total; update(); finish(); }
       });
+
+      // Hard safety: regardless of any JS error, never leave the page
+      // with scroll locked behind the preloader for more than 6 seconds.
+      // Worst case the user sees the (unanimated) page. Better than a
+      // dead page they can't scroll.
+      setTimeout(function () {
+        if (document.documentElement.classList.contains('is-loading')) {
+          if (pre && pre.parentNode) pre.parentNode.removeChild(pre);
+          document.documentElement.classList.remove('is-loading');
+          document.dispatchEvent(new Event('site:ready'));
+        }
+      }, 6000);
     })();
   </script>
 

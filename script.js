@@ -20,7 +20,16 @@ function __tryInit() {
     return;
   }
   __initRan = true;
-  init();
+  // Wrap init in try/catch so a single broken animation never leaves
+  // the page in a half-initialised state (with native scroll possibly
+  // overridden by a half-set-up Lenis, etc.).
+  try {
+    init();
+  } catch (err) {
+    console.error('[chipmates] init failed, falling back to static page', err);
+    // Make sure scroll is unlocked even if init blew up.
+    document.documentElement.classList.remove('is-loading');
+  }
 }
 
 // Set the entrance starting states. Runs while preloader is still
@@ -175,14 +184,12 @@ function init() {
   setupCanvasFX();
 
   /* ---------------- MOBILE EARLY EXIT ---------------- */
-  // On phones (or any touch-only device) skip everything below. Dozens
-  // of ScrollTriggers + scroll-tied parallax + perpetual yoyo bounces
-  // on every chipmate were tanking framerate, which made sections fade
-  // in noticeably late on mobile. Mobile keeps: hero entrance, idle hero
-  // motion, stat counter, the Adopt-O-Matic, Lenis smooth scroll. The
-  // squad cards / habitat / stickers just sit in place — much faster.
-  const isMobile = window.matchMedia('(max-width: 640px)').matches
-                || window.matchMedia('(hover: none)').matches;
+  // On narrow viewports skip the heavy scroll-tied work. We deliberately
+  // do NOT include `(hover: none)` here — that media query matches on
+  // any Windows touchscreen laptop, so it would false-positive a real
+  // desktop user with a touchscreen and downgrade their experience.
+  // Width-based check is reliable and good enough.
+  const isMobile = window.matchMedia('(max-width: 640px)').matches;
   if (isMobile) return;
 
   /* ---------------- TEXT REVEALS ---------------- */
